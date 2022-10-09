@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 class ChangelogCreator
 {
-    private array $changelogDirectoryFiles;
+    private array $changelogDirectoryReleaseDirectories;
     /**
      * @throws Exception
      */
@@ -19,15 +19,15 @@ class ChangelogCreator
         }
 
         $filesWithoutExcludedFiles = $this->removeExcludedFiles($directoryFiles, $excludedFiles);
-        $this->changelogDirectoryFiles = $filesWithoutExcludedFiles;
+        $this->changelogDirectoryReleaseDirectories = $filesWithoutExcludedFiles;
     }
 
     public function getChangelog(): array
     {
         $changelog = [];
 
-        foreach ($this->changelogDirectoryFiles as $file) {
-            $filePath = $this->directoryPath."/{$file}";
+        foreach ($this->changelogDirectoryReleaseDirectories as $directory) {
+            $filePath = $this->directoryPath."/{$directory}";
             if ($this->isPathAReleaseDirectory($filePath)) {
                 $releaseChangelog = $this->generateSingleReleaseChangelog($filePath);
                 $releaseName = $releaseChangelog["info"]["name"];
