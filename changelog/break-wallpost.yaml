@@ -1,0 +1,13 @@
+---
+# What type of change? Possible values: FEATURE | CHANGE | BUGFIX
+type: CHANGE
+
+# Describe your change in 1-2 sentences.
+description: Add break before adding a wallpost.
+
+# Merge Request ID
+merge_request_id: 1234
+
+# Contributor(s)
+contributors:
+  - Martin Cooper (deine Mama)
