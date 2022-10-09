@@ -35,6 +35,7 @@ class ChangelogCreator
             }
         }
 
+        krsort($changelog, SORT_NUMERIC);
         return $changelog;
     }
 
