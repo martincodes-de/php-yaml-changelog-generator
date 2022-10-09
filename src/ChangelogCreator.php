@@ -30,8 +30,8 @@ class ChangelogCreator
             $filePath = $this->directoryPath."/{$directory}";
             if ($this->isPathAReleaseDirectory($filePath)) {
                 $releaseChangelog = $this->generateSingleReleaseChangelog($filePath);
-                $releaseName = $releaseChangelog["info"]["name"];
-                $changelog[$releaseName] = $releaseChangelog;
+                $releaseTimestamp = $releaseChangelog["info"]["released_at_timestamp"];
+                $changelog[$releaseTimestamp] = $releaseChangelog;
             }
         }
 
@@ -60,7 +60,13 @@ class ChangelogCreator
 
     private function generateReleaseInformationFromYamlFile(string $filePath): array
     {
-        return yaml_parse_file($filePath);
+        $releaseInformation = yaml_parse_file($filePath);
+
+        $releaseDate = strtotime($releaseInformation["released_at"]);
+        $releaseDateAsTimestamp = $releaseDate ? $releaseDate : time();
+        $releaseInformation["released_at_timestamp"] = $releaseDateAsTimestamp;
+
+        return $releaseInformation;
     }
 
     private function generateEntryFromYamlFile(string $filePath): array
