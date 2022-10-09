@@ -5,12 +5,15 @@ declare(strict_types=1);
 class ChangelogCreator
 {
     private array $changelogDirectoryReleaseDirectories;
+
     /**
      * @throws Exception
      */
     public function __construct(
         private readonly string $directoryPath,
-        private readonly array $excludedFiles,
+        private readonly array  $excludedFiles,
+        private readonly string $releaseInfoFileName = "releaseinfo.yaml",
+        private readonly string $releaseDictionaryNeedle = "",
     )
     {
         $directoryFiles = scandir($directoryPath);
@@ -49,14 +52,14 @@ class ChangelogCreator
             $filePath = $directoryPath."/{$file}";
             $releaseChangelog["changes"][] = $this->generateEntryFromYamlFile($filePath);
         }
-        $releaseChangelog["info"] = $this->generateReleaseInformationFromYamlFile($directoryPath."/releaseinfo.yaml");
+        $releaseChangelog["info"] = $this->generateReleaseInformationFromYamlFile($directoryPath."/{$this->releaseInfoFileName}");
 
         return $releaseChangelog;
     }
 
     private function isPathAReleaseDirectory(string $directoryPath): bool
     {
-        return is_dir($directoryPath) && str_contains(haystack: $directoryPath, needle: "fs-release");
+        return is_dir($directoryPath) && str_contains(haystack: $directoryPath, needle: $this->releaseDictionaryNeedle);
     }
 
     private function generateReleaseInformationFromYamlFile(string $filePath): array
