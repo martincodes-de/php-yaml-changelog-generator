@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 class ChangelogCreator
 {
-    private array $files;
+    private array $changelogDirectoryFiles;
     /**
      * @throws Exception
      */
@@ -19,7 +19,56 @@ class ChangelogCreator
         }
 
         $filesWithoutExcludedFiles = $this->removeExcludedFiles($directoryFiles, $excludedFiles);
-        $this->files = $filesWithoutExcludedFiles;
+        $this->changelogDirectoryFiles = $filesWithoutExcludedFiles;
+    }
+
+    public function getChangelog(): array
+    {
+        $changelog = [];
+
+        foreach ($this->changelogDirectoryFiles as $file) {
+            $filePath = $this->directoryPath."/{$file}";
+            if ($this->isPathAReleaseDirectory($filePath)) {
+                $releaseChangelog = $this->generateSingleReleaseChangelog($filePath);
+                $releaseName = $releaseChangelog["info"]["name"];
+                $changelog[$releaseName] = $releaseChangelog;
+            }
+        }
+
+        return $changelog;
+    }
+
+    private function generateSingleReleaseChangelog(string $directoryPath): array
+    {
+        $changelogFiles = scandir($directoryPath);
+        $changelogFiles = $this->removeExcludedFiles($changelogFiles, $this->excludedFiles);
+
+        $releaseChangelog = [];
+        foreach ($changelogFiles as $file) {
+            $filePath = $this->directoryPath."/{$file}";
+            $releaseChangelog["changes"][] = $this->generateEntryFromYamlFile($filePath);
+        }
+        $releaseChangelog["info"] = $this->generateReleaseInformationFromYamlFile($directoryPath."/releaseinfo.yaml");
+
+        return $releaseChangelog;
+    }
+
+    private function isPathAReleaseDirectory(string $directoryPath): bool
+    {
+        return is_dir($directoryPath) && str_contains(haystack: $directoryPath, needle: "fs-release");
+    }
+
+    private function generateReleaseInformationFromYamlFile(string $filePath): array
+    {
+        return yaml_parse_file($filePath);
+    }
+
+    private function generateEntryFromYamlFile(string $filePath): array
+    {
+        $entry = yaml_parse_file($filePath);
+        $addedAtDateTime = date(DATE_ATOM, filemtime($filePath));
+        $entry["added_at"] = $addedAtDateTime;
+        return $entry;
     }
 
     private function removeExcludedFiles(array $files, array $excludedFiles): array

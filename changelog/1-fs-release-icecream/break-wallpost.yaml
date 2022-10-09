@@ -5,9 +5,10 @@ type: BUGFIX
 # Describe your change in 1-2 sentences.
 description: Add break before adding a wallpost.
 
-# Merge Request ID
-merge_request_id: 1234
+# Merge Request IDs
+merge_request_ids:
+  - 1234
 
-# Contributor(s)
+# Contributor(s) gitlab usernames
 contributors:
-  - Martin Cooper (deine Mama)
+  - Martin Cooper

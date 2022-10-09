@@ -1,13 +1,13 @@
 ---
 # What type of change? Possible values: FEATURE | CHANGE | BUGFIX
-type: CHANGE
+type: BUGFIX
 
 # Describe your change in 1-2 sentences.
-description: Add break before adding a wallpost.
+description: Add break before adding a wallpost, but removed buggy button.
 
 # Merge Request ID
-merge_request_id: 1234
+merge_request_id: 1235
 
 # Contributor(s)
 contributors:
-  - Martin Cooper (deine Mama)
+  - Chriswalg
