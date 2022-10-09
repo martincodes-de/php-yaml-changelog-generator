@@ -45,7 +45,7 @@ class ChangelogCreator
 
         $releaseChangelog = [];
         foreach ($changelogFiles as $file) {
-            $filePath = $this->directoryPath."/{$file}";
+            $filePath = $directoryPath."/{$file}";
             $releaseChangelog["changes"][] = $this->generateEntryFromYamlFile($filePath);
         }
         $releaseChangelog["info"] = $this->generateReleaseInformationFromYamlFile($directoryPath."/releaseinfo.yaml");
