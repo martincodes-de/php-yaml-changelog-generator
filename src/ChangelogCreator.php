@@ -33,7 +33,7 @@ class ChangelogCreator
             $filePath = $this->directoryPath."/{$directory}";
             if ($this->isPathAReleaseDirectory($filePath)) {
                 $releaseChangelog = $this->generateSingleReleaseChangelog($filePath);
-                $releaseTimestamp = $releaseChangelog["info"]["released_at_timestamp"];
+                $releaseTimestamp = $releaseChangelog["release"]["released_at_timestamp"];
                 $changelog[$releaseTimestamp] = $releaseChangelog;
             }
         }
@@ -52,7 +52,7 @@ class ChangelogCreator
             $filePath = $directoryPath."/{$file}";
             $releaseChangelog["changes"][] = $this->generateEntryFromYamlFile($filePath);
         }
-        $releaseChangelog["info"] = $this->generateReleaseInformationFromYamlFile($directoryPath."/{$this->releaseInfoFileName}");
+        $releaseChangelog["release"] = $this->generateReleaseInformationFromYamlFile($directoryPath."/{$this->releaseInfoFileName}");
 
         return $releaseChangelog;
     }
