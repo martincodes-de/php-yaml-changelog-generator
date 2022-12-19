@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use Symfony\Component\Yaml\Yaml;
+
+require __DIR__."/../vendor/autoload.php";
+
 class YamlChangelogCreator
 {
     /**
@@ -40,7 +44,7 @@ class YamlChangelogCreator
             $filePath = $this->directoryPath."/{$directory}";
             if ($this->isPathAReleaseDirectory($filePath)) {
                 $releaseChangelog = $this->generateSingleReleaseChangelog($filePath);
-                $releaseTimestamp = (int) $releaseChangelog["release"]["released_at_timestamp"];
+                $releaseTimestamp = $releaseChangelog["release"]["released_at_timestamp"];
                 $changelog[$releaseTimestamp] = $releaseChangelog;
             }
         }
@@ -59,6 +63,7 @@ class YamlChangelogCreator
         $changelogFiles = $this->removeExcludedFiles($changelogFiles, $this->excludedFiles);
 
         $releaseChangelog = [];
+        $releaseChangelog["changes"] = [];
         foreach ($changelogFiles as $file) {
             $filePath = $directoryPath."/{$file}";
             $releaseChangelog["changes"][] = $this->generateEntryFromYamlFile($filePath);
@@ -79,11 +84,11 @@ class YamlChangelogCreator
      */
     private function generateReleaseInformationFromYamlFile(string $filePath): array
     {
-        $releaseInformation = yaml_parse_file($filePath);
-
-        $releaseDate = strtotime($releaseInformation["released_at"]);
-        $releaseDateAsTimestamp = $releaseDate ? $releaseDate : time();
+        $releaseInformation = Yaml::parseFile($filePath);
+        $releaseDate = date(DATE_ATOM, $releaseInformation["released_at"]);
+        $releaseDateAsTimestamp = $releaseDate ? strtotime($releaseDate) : time();
         $releaseInformation["released_at_timestamp"] = $releaseDateAsTimestamp;
+        $releaseInformation["released_at"] = $releaseDate;
 
         return $releaseInformation;
     }
@@ -94,7 +99,7 @@ class YamlChangelogCreator
      */
     private function generateEntryFromYamlFile(string $filePath): array
     {
-        $entry = yaml_parse_file($filePath);
+        $entry = Yaml::parseFile($filePath);
         $modificationTimestamp = filemtime($filePath) ?: time();
         $addedAtDateTime = date(DATE_ATOM, $modificationTimestamp);
         $entry["added_at"] = $addedAtDateTime;
@@ -108,6 +113,7 @@ class YamlChangelogCreator
      */
     private function removeExcludedFiles(array $files, array $excludedFiles): array
     {
+        $excludedFiles = [".", "..", ...$excludedFiles];
         return array_filter($files, fn ($file) => !in_array($file, $excludedFiles));
     }
 }
