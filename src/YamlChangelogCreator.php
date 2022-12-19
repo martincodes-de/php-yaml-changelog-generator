@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-class ChangelogCreator
+class YamlChangelogCreator
 {
     /**
      * @var String[]
