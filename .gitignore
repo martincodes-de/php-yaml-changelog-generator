@@ -1,4 +1,4 @@
-./vendor/
-./.idea/
+/vendor/
+/.idea/
 .idea/php.xml
 .idea/php-yaml-changelog-generator.iml
