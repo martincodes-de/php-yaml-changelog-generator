@@ -85,7 +85,7 @@ class YamlChangelogCreator
     {
         $releaseInformation = Yaml::parseFile($filePath);
         $releaseDate = date(DATE_ATOM, $releaseInformation["released_at"]);
-        $releaseDateAsTimestamp = $releaseDate ? $releaseDate : time();
+        $releaseDateAsTimestamp = $releaseDate ? strtotime($releaseDate) : time();
         $releaseInformation["released_at_timestamp"] = $releaseDateAsTimestamp;
 
         return $releaseInformation;
