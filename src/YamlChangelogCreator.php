@@ -44,7 +44,7 @@ class YamlChangelogCreator
             $filePath = $this->directoryPath."/{$directory}";
             if ($this->isPathAReleaseDirectory($filePath)) {
                 $releaseChangelog = $this->generateSingleReleaseChangelog($filePath);
-                $releaseTimestamp = (int) $releaseChangelog["release"]["released_at_timestamp"];
+                $releaseTimestamp = $releaseChangelog["release"]["released_at_timestamp"];
                 $changelog[$releaseTimestamp] = $releaseChangelog;
             }
         }
@@ -63,6 +63,7 @@ class YamlChangelogCreator
         $changelogFiles = $this->removeExcludedFiles($changelogFiles, $this->excludedFiles);
 
         $releaseChangelog = [];
+        $releaseChangelog["changes"] = [];
         foreach ($changelogFiles as $file) {
             $filePath = $directoryPath."/{$file}";
             $releaseChangelog["changes"][] = $this->generateEntryFromYamlFile($filePath);
@@ -87,6 +88,7 @@ class YamlChangelogCreator
         $releaseDate = date(DATE_ATOM, $releaseInformation["released_at"]);
         $releaseDateAsTimestamp = $releaseDate ? strtotime($releaseDate) : time();
         $releaseInformation["released_at_timestamp"] = $releaseDateAsTimestamp;
+        $releaseInformation["released_at"] = $releaseDate;
 
         return $releaseInformation;
     }
@@ -111,6 +113,7 @@ class YamlChangelogCreator
      */
     private function removeExcludedFiles(array $files, array $excludedFiles): array
     {
+        $excludedFiles = [".", "..", ...$excludedFiles];
         return array_filter($files, fn ($file) => !in_array($file, $excludedFiles));
     }
 }
