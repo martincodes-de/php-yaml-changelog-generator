@@ -2,7 +2,7 @@
 
 include __DIR__."/ChangelogCreator.php";
 
-$changelogDirectoryPath = __DIR__."/../changelog";
+$changelogDirectoryPath = __DIR__."/../test-changelog";
 $changelogDirectory = scandir($changelogDirectoryPath);
 $excludedFiles = [".", "..", "template.yaml", "releaseinfo.yaml"];
 
