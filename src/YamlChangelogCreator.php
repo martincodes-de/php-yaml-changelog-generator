@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use Symfony\Component\Yaml\Yaml;
+
+require __DIR__."/../vendor/autoload.php";
+
 class YamlChangelogCreator
 {
     /**
@@ -79,9 +83,8 @@ class YamlChangelogCreator
      */
     private function generateReleaseInformationFromYamlFile(string $filePath): array
     {
-        $releaseInformation = yaml_parse_file($filePath);
-
-        $releaseDate = strtotime($releaseInformation["released_at"]);
+        $releaseInformation = Yaml::parseFile($filePath);
+        $releaseDate = date(DATE_ATOM, $releaseInformation["released_at"]);
         $releaseDateAsTimestamp = $releaseDate ? $releaseDate : time();
         $releaseInformation["released_at_timestamp"] = $releaseDateAsTimestamp;
 
@@ -94,7 +97,7 @@ class YamlChangelogCreator
      */
     private function generateEntryFromYamlFile(string $filePath): array
     {
-        $entry = yaml_parse_file($filePath);
+        $entry = Yaml::parseFile($filePath);
         $modificationTimestamp = filemtime($filePath) ?: time();
         $addedAtDateTime = date(DATE_ATOM, $modificationTimestamp);
         $entry["added_at"] = $addedAtDateTime;
