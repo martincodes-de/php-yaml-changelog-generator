@@ -13,6 +13,7 @@
             "role": "Maintainer"
         }
     ],
+    "version": "1.0.0",
     "require": {
         "php": ">=8.0.0",
         "ext-yaml": "*"
