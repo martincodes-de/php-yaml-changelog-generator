@@ -44,7 +44,7 @@ class YamlChangelogCreator
             $filePath = $this->directoryPath."/{$directory}";
             if ($this->isPathAReleaseDirectory($filePath)) {
                 $releaseChangelog = $this->generateSingleReleaseChangelog($filePath);
-                $releaseTimestamp = $releaseChangelog["release"]["released_at_timestamp"];
+                $releaseTimestamp = (int) $releaseChangelog["release"]["released_at_timestamp"];
                 $changelog[$releaseTimestamp] = $releaseChangelog;
             }
         }
@@ -86,7 +86,7 @@ class YamlChangelogCreator
     {
         $releaseInformation = Yaml::parseFile($filePath);
         $releaseDate = date(DATE_ATOM, $releaseInformation["released_at"]);
-        $releaseDateAsTimestamp = $releaseDate ? strtotime($releaseDate) : time();
+        $releaseDateAsTimestamp = strtotime($releaseDate);
         $releaseInformation["released_at_timestamp"] = $releaseDateAsTimestamp;
         $releaseInformation["released_at"] = $releaseDate;
 
