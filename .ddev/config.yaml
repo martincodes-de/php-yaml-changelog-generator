@@ -12,7 +12,6 @@ mariadb_version: "10.3"
 mysql_version: ""
 nfs_mount_enabled: false
 mutagen_enabled: false
-webimage_extra_packages: [php8.1-yaml]
 use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
