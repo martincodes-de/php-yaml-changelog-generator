@@ -2,7 +2,7 @@
 
 use Martincodes\YamlChangelogGenerator\YamlChangelogCreator;
 
-require __DIR__."/../vendor/autoload.php";
+require __DIR__ . '/YamlChangelogCreator.php';
 
 $changelogDirectoryPath = __DIR__."/../test-changelog";
 $changelogDirectory = scandir($changelogDirectoryPath);

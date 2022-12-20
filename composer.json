@@ -23,7 +23,9 @@
             "Martincodes\\YamlChangelogGenerator\\": "src"
         }
     },
-    
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse src -l 8"
+    },
     "require-dev": {
         "phpstan/phpstan": "^1.8"
     }

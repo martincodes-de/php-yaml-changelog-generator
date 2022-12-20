@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Martincodes\YamlChangelogGenerator;
 
+use Exception;
 use Symfony\Component\Yaml\Yaml;
 
 require __DIR__."/../vendor/autoload.php";
